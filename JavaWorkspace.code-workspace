@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "Java/UncleanedCredentialsAfter"
+		},
+		{
+			"path": "Java/UncleanedCredentialsBefore"
+		},
+		{
+			"path": "Java/UncleanedFileContentAfter"
+		},
+		{
+			"path": "Java/UncleanedFileContentBefore"
+		},
+		{
+			"path": "Java/SensitiveMutableClassBefore"
+		},
+		{
+			"path": "Java/SensitiveMutableClassAfter"
+		}
+	]
+}
