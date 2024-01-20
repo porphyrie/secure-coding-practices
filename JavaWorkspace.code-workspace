@@ -17,6 +17,12 @@
 		},
 		{
 			"path": "Java/SensitiveMutableClassAfter"
+		},
+		{
+			"path": "Java/CanonicalizePathNameBefore"
+		},
+		{
+			"path": "Java/CanonicalizePathNameAfter"
 		}
 	]
 }
