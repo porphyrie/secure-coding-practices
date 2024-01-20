@@ -9,21 +9,19 @@ public class App {
         BufferedReader reader = new BufferedReader(
                 new InputStreamReader(System.in));
         System.out.print("Enter a file name: ");
-        String userInput = reader.readLine(); // "../../../etc/paaswd"
+        String userInput = reader.readLine();
 
         String filePath = System.getProperty("user.dir") +
-                "\\uploads\\" + userInput;
+                "/uploads/" + userInput;
         File file = new File(filePath);
-        System.out.println(file.getCanonicalPath());
         if (!file.exists()) {
             System.out.println("File not found.");
             return;
         }
 
-        // read the file content
         byte[] fileContent = Files.readAllBytes(file.toPath());
         if (fileContent != null) {
-            System.out.println("File content:");
+            System.out.print("File content: ");
             for (int i = 0; i < fileContent.length; i++) {
                 System.out.print((char) fileContent[i]);
                 fileContent[i] = 0;
@@ -34,3 +32,4 @@ public class App {
 
     }
 }
+
