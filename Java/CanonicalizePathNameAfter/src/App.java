@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -12,20 +12,15 @@ public class App {
         System.out.print("Enter a file name: ");
         String userInput = reader.readLine();
 
-        String filePath = System.getProperty("user.dir") +
-                "/uploads/" + userInput;
-        File file = new File(filePath);
-        if (!file.exists()) {
-            System.out.println("File not found.");
-            return;
-        }
+        Path baseDir = Paths.get(System.getProperty("user.dir")).resolve("uploads");
+        Path filePath = baseDir.resolve(userInput).normalize().toAbsolutePath();
 
-        if (!isValidFilePath(file)) {
+        if (!isValidFilePath(filePath, baseDir)) {
             System.out.println("Invalid file path.");
             return;
         }
 
-        byte[] fileContent = Files.readAllBytes(file.toPath());
+        byte[] fileContent = Files.readAllBytes(filePath);
         if (fileContent != null) {
             System.out.print("File content: ");
             for (int i = 0; i < fileContent.length; i++) {
@@ -38,11 +33,10 @@ public class App {
 
     }
 
-    public static boolean isValidFilePath(File file) throws IOException {
-        // canonicalize the filePath to resolve symbolic links
-        // and remove any ".." components
-        return file.getCanonicalPath().startsWith(
-            System.getProperty("user.dir") + "\\uploads\\");
+    public static boolean isValidFilePath(Path filePath, Path baseDir) {
+        // Perform input validation to ensure that filePath doesn't contain directory traversal attempts
+        // and that it is within the specified baseDir
+        return filePath.startsWith(baseDir) && !filePath.toString().contains("..");
     }
 }
 

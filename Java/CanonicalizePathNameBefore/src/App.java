@@ -1,7 +1,8 @@
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -11,15 +12,10 @@ public class App {
         System.out.print("Enter a file name: ");
         String userInput = reader.readLine();
 
-        String filePath = System.getProperty("user.dir") +
-                "/uploads/" + userInput;
-        File file = new File(filePath);
-        if (!file.exists()) {
-            System.out.println("File not found.");
-            return;
-        }
+        Path baseDir = Paths.get(System.getProperty("user.dir")).resolve("uploads");
+        Path filePath = baseDir.resolve(userInput).normalize().toAbsolutePath();
 
-        byte[] fileContent = Files.readAllBytes(file.toPath());
+        byte[] fileContent = Files.readAllBytes(filePath);
         if (fileContent != null) {
             System.out.print("File content: ");
             for (int i = 0; i < fileContent.length; i++) {
