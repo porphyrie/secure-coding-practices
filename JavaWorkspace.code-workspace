@@ -26,6 +26,12 @@
 		},
 		{
 			"path": "Java/arbitraryfileupload"
+		},
+		{
+			"path": "Java/FileCreationOverwriteAfter"
+		},
+		{
+			"path": "Java/FileCreationOverwriteBefore"
 		}
 	],
 	"settings": {
