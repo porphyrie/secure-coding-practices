@@ -23,6 +23,12 @@
 		},
 		{
 			"path": "Java/CanonicalizePathNameAfter"
+		},
+		{
+			"path": "Java/arbitraryfileupload"
 		}
-	]
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
 }
