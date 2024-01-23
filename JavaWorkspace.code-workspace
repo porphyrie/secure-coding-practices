@@ -32,6 +32,12 @@
 		},
 		{
 			"path": "Java/FileCreationOverwriteBefore"
+		},
+		{
+			"path": "Java/UnzipBombBefore"
+		},
+		{
+			"path": "Java/UnzipBombAfter"
 		}
 	],
 	"settings": {
