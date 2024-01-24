@@ -23,6 +23,24 @@
 		},
 		{
 			"path": "Java/CanonicalizePathNameAfter"
+		},
+		{
+			"path": "Java/arbitraryfileupload"
+		},
+		{
+			"path": "Java/FileCreationOverwriteAfter"
+		},
+		{
+			"path": "Java/FileCreationOverwriteBefore"
+		},
+		{
+			"path": "Java/UnzipBombBefore"
+		},
+		{
+			"path": "Java/UnzipBombAfter"
 		}
-	]
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
 }
