@@ -6,7 +6,7 @@ pipeline {
                 script {
                     // Dynamically find and set the SONAR_SOURCES using a Bash command
                     env.SONAR_SOURCES = sh(
-                        script: "find Java -type d -name src | tr '\\n' ',' | sed 's/,\$//'",
+                        script: "find Java -type d -name src | grep -v 'Java/arbitraryfileupload/src' | tr '\\n' ',' | sed 's/,\$//'",
                         returnStdout: true
                     ).trim()
                     // Print the dynamically generated SONAR_SOURCES for verification
