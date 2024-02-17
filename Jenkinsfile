@@ -4,19 +4,20 @@ pipeline {
         stage('Prepare SonarQube Sources') {
             steps {
                 script {
-                    // Use a Bash command to find all 'src' directories under 'Java'
-                    // and concatenate them into a single string separated by commas
+                    // Dynamically find and set the SONAR_SOURCES using a Bash command
                     env.SONAR_SOURCES = sh(
                         script: "find Java -type d -name src | tr '\\n' ',' | sed 's/,\$//'",
                         returnStdout: true
                     ).trim()
+                    // Print the dynamically generated SONAR_SOURCES for verification
+                    echo "SONAR_SOURCES: ${env.SONAR_SOURCES}"
                 }
             }
         }
         stage('SonarQube Scan') {
             steps {
                 // This step now uses the SonarQube server configuration from Jenkins system settings
-                withSonarQubeEnv('sonar-server') { // Replace 'sonar-server' with the name you gave your SonarQube server configuration
+                withSonarQubeEnv('sonar-server') {
                     // Scan directories specified in the SONAR_SOURCES environment variable
                     sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES}"
                 }
