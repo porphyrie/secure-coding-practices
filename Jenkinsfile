@@ -14,6 +14,16 @@ pipeline {
                 }
             }
         }
+        stage('Compile') {
+            steps {
+                // Compile each Java source file found in the SONAR_SOURCES directories
+                script {
+                    env.SONAR_SOURCES.split(',').each { directory ->
+                        sh "javac -d bin ${directory}/*.java"
+                    }
+                }
+            }
+        }
         stage('SonarQube Scan') {
             steps {
                 // This step now uses the SonarQube server configuration from Jenkins system settings
