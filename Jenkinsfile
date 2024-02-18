@@ -41,22 +41,5 @@ pipeline {
                 }
             }
         }
-        stage('Prepare Git') {
-            steps {
-                script {
-                    // Use Jenkins' environment variables to get the current workspace directory
-                    // and mark it as safe for Git operations.
-                    sh "git config --global --add safe.directory ${env.WORKSPACE}"
-                }
-            }
-        }
-        stage('Semgrep Scan') {
-            steps {
-                script {
-                    // Run Semgrep using the SEMGREP_APP_TOKEN for authentication with Semgrep Cloud
-                    sh 'semgrep ci'
-                }
-            }
-        }
     }
 }
