@@ -23,7 +23,7 @@ pipeline {
                 withSonarQubeEnv('sonar-server') {
                     script {
                         // Dynamically find all src directories for sonar.sources
-                        def sources = sh(script: "find ./Java -type d -name src | grep -v arbitraryfileupload | tr '\\n' ','", returnStdout: true).trim()
+                        def sources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
                         sources = sources[0..-2] // Remove the trailing comma
 
                         // Dynamically find all bin directories for sonar.java.binaries, including Maven's target/classes
