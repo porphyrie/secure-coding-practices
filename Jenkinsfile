@@ -22,17 +22,6 @@ pipeline {
                 }
             }
         }
-        // Add a Semgrep Scan stage
-        stage('Semgrep Scan') {
-            steps {
-                script {
-                    // Install Semgrep if not already present
-                    sh 'pip3 install semgrep'
-                    // Run Semgrep using the SEMGREP_APP_TOKEN for authentication with Semgrep Cloud
-                    sh 'semgrep ci'
-                }
-            }
-        }
         stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv('sonar-server') {
@@ -53,6 +42,16 @@ pipeline {
                         -Dsonar.java.binaries=${binaries}
                         """
                     }
+                }
+            }
+        }
+        stage('Semgrep Scan') {
+            steps {
+                script {
+                    // Install Semgrep if not already present
+                    sh 'pip3 install semgrep'
+                    // Run Semgrep using the SEMGREP_APP_TOKEN for authentication with Semgrep Cloud
+                    sh 'semgrep ci'
                 }
             }
         }
