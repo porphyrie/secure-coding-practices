@@ -32,16 +32,17 @@ pipeline {
         }
         stage('SonarQube Scan') {
             steps {
-                // This step now uses the SonarQube server configuration from Jenkins system settings
                 withSonarQubeEnv('sonar-server') {
-                    // Scan directories specified in the SONAR_SOURCES environment variable
-                    sh "find Java -path '*/bin/*.class' > sonar-java-binaries.txt"
-                    // Read the contents of sonar-java-binaries.txt and assign it to sonarJavaBinaries variable
-                    def sonarJavaBinaries = sh(script: 'cat sonar-java-binaries.txt', returnStdout: true).trim().replaceAll('\\n', ',')
-                    // Print sonarJavaBinaries for verification
-                    echo "Sonar Java Binaries: ${sonarJavaBinaries}"
-                    // Pass sonarJavaBinaries to sonar scanner
-                    sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=${sonarJavaBinaries}"
+                    script {
+                        // Scan directories specified in the SONAR_SOURCES environment variable
+                        sh "find Java -path '*/bin/*.class' > sonar-java-binaries.txt"
+                        // Read the contents of sonar-java-binaries.txt and assign it to sonarJavaBinaries variable
+                        def sonarJavaBinaries = sh(script: 'cat sonar-java-binaries.txt', returnStdout: true).trim().replaceAll('\\n', ',')
+                        // Print sonarJavaBinaries for verification
+                        echo "Sonar Java Binaries: ${sonarJavaBinaries}"
+                        // Pass sonarJavaBinaries to sonar scanner
+                        sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=${sonarJavaBinaries}"
+                    }
                 }
             }
         }
