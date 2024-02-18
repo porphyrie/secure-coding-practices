@@ -36,9 +36,15 @@ pipeline {
                 withSonarQubeEnv('sonar-server') {
                     // Scan directories specified in the SONAR_SOURCES environment variable
                     sh "find Java -path '*/bin/*.class' > sonar-java-binaries.txt"
-                    sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=sonar-java-binaries.txt"
+                    // Read the contents of sonar-java-binaries.txt and assign it to sonarJavaBinaries variable
+                    def sonarJavaBinaries = readFile('sonar-java-binaries.txt').trim()
+                    // Print sonarJavaBinaries for verification
+                    echo "Sonar Java Binaries: ${sonarJavaBinaries}"
+                    // Pass sonarJavaBinaries to sonar scanner
+                    sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=${sonarJavaBinaries}"
                 }
-            }
-        }
+    }
+}
+
     }
 }
