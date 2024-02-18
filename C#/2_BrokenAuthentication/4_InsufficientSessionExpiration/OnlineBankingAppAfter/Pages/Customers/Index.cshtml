@@ -1,0 +1,39 @@
+@page
+@model OnlineBankingApp.Pages.Customers.IndexModel
+@inject System.Text.Encodings.Web.JavaScriptEncoder jsEncoder
+
+@{
+    ViewData["Title"] = "List of Customers";
+}
+
+<h1>List of Customers</h1>
+
+<p>
+    <a asp-page="Create">Create New Customer Account</a>
+</p>
+
+<table id="table" class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Customer)
+        {
+            <tr>
+                <td>@Html.Encode(item.FirstName)</td>
+                <td>@Html.Encode(item.MiddleName)</td>
+                <td>@Html.Encode(item.LastName)</td>
+                <td>@Html.Encode(item.DateOfBirth.ToString("d"))</td>
+                <td>@Html.Encode(item.Email)</td>
+                <td>@Html.Encode(item.PhoneNumber)</td>
+            </tr>
+        }
+    </tbody>
+</table>

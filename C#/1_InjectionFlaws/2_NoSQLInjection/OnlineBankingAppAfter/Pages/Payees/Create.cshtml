@@ -1,0 +1,56 @@
+﻿@page
+@model OnlineBankingApp.Pages.Payees.CreateModel
+
+@{
+    ViewData["Title"] = "Create New Payee";
+}
+
+<h1>Create New Payee</h1>
+
+<h4>Payee Information</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Payee.Name" class="control-label"></label>
+                <input asp-for="Payee.Name" class="form-control" />
+                <span asp-validation-for="Payee.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Payee.Address" class="control-label"></label>
+                <input asp-for="Payee.Address" class="form-control" />
+                <span asp-validation-for="Payee.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Payee.PhoneNo" class="control-label"></label>
+                <input asp-for="Payee.PhoneNo" class="form-control" />
+                <span asp-validation-for="Payee.PhoneNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Payee.AccountNo" class="control-label"></label>
+                <input asp-for="Payee.AccountNo" class="form-control" />
+                <span asp-validation-for="Payee.AccountNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Payee.Description" class="control-label"></label>
+                <input asp-for="Payee.Description" class="form-control" />
+                <span asp-validation-for="Payee.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create Payee" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List of Payees</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
