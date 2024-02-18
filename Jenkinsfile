@@ -4,8 +4,7 @@ pipeline {
         stage('Build Projects') {
             steps {
                 script {
-                    // Compile all Java projects except arbitraryfileupload with javac
-                    sh '''
+                    sh '''/bin/bash -c '
                     for dir in ./Java/*/src; do
                         if [[ "$dir" != *"arbitraryfileupload/src"* ]]; then
                             base=$(dirname "$dir")
