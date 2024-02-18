@@ -25,15 +25,13 @@ pipeline {
                         def sources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
                         // Remove the trailing comma
                         sources = sources[0..-2]
-                        
-                        // Dynamically find all bin directories for sonar.java.binaries, including arbitraryfileupload if it's built separately by Maven
-                        def binaries = sh(script: "find ./Java -type d -name bin | tr '\\n' ','", returnStdout: true).trim()
-                        // Add the Maven project binary directory manually
-                        binaries = binaries + "./Java/arbitraryfileupload/target/classes,"
+
+                        // Dynamically find all bin directories for sonar.java.binaries, including Maven's target/classes
+                        def binaries = sh(script: "find ./Java -type d \\( -name bin -o -path '*/target/classes' \\) | tr '\\n' ','", returnStdout: true).trim()
                         // Remove the trailing comma
                         binaries = binaries[0..-2]
                         
-                        // Run sonar-scanner with dynamically set properties
+                        // Execute sonar-scanner with dynamically generated properties
                         sh """
                         sonar-scanner \
                         -Dsonar.projectKey=secure-coding-practices \
