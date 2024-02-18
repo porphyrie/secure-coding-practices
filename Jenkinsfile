@@ -22,7 +22,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar-server') {
                     script {
-                        // Dynamically find all src directories for sonar.sources
+                        // Dynamically find all src directories for sonar.sources 
                         def sources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
                         sources = sources[0..-2] // Remove the trailing comma
 
