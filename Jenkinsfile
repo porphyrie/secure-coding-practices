@@ -41,7 +41,7 @@ pipeline {
                         // Print sonarJavaBinaries for verification
                         echo "Sonar Java Binaries: ${sonarJavaBinaries}"
                         // Pass sonarJavaBinaries to sonar scanner
-                        sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=${sonarJavaBinaries}"
+                        sh "sonar-scanner -X -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=${sonarJavaBinaries}"
                     }
                 }
             }
