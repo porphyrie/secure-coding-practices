@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        // Define SEMGREP_APP_TOKEN for Semgrep Cloud authentication
-        SEMGREP_APP_TOKEN = credentials('semgrep-token')
-    }
     stages {
         stage('Build Projects') {
             steps {
@@ -57,8 +53,6 @@ pipeline {
         stage('Semgrep Scan') {
             steps {
                 script {
-                    // Install Semgrep if not already present
-                    sh 'pip3 install semgrep'
                     // Run Semgrep using the SEMGREP_APP_TOKEN for authentication with Semgrep Cloud
                     sh 'semgrep ci'
                 }
