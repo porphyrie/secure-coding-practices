@@ -19,7 +19,13 @@ pipeline {
                 // Compile each Java source file found in the SONAR_SOURCES directories
                 script {
                     env.SONAR_SOURCES.split(',').each { directory ->
-                        sh "javac -d bin ${directory}/*.java"
+                        def outputDir = "${directory}/../bin" // Set the output directory to be one level up from src
+                        sh "mkdir -p ${outputDir}" // Create the bin directory if it doesn't exist
+                        def compileCommand = "javac -d ${outputDir} ${directory}/*.java"
+                        def compileStatus = sh(script: compileCommand, returnStatus: true)
+                        if (compileStatus != 0) {
+                            error "Compilation failed for directory: ${directory}"
+                        }
                     }
                 }
             }
