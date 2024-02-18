@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         // Define SEMGREP_APP_TOKEN for Semgrep Cloud authentication
-        SEMGREP_APP_TOKEN = credentials('0c4017e6c28391fa1660f069647a6c28b700230ead5129c7264fbfa5e2e943a2')
+        SEMGREP_APP_TOKEN = credentials('semgrep-token')
     }
     stages {
         stage('Build Projects') {
