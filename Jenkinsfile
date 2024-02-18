@@ -35,7 +35,7 @@ pipeline {
                 // This step now uses the SonarQube server configuration from Jenkins system settings
                 withSonarQubeEnv('sonar-server') {
                     // Scan directories specified in the SONAR_SOURCES environment variable
-                    sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES}"
+                    sh "sonar-scanner -Dsonar.projectKey=secure-coding-practices -Dsonar.sources=${env.SONAR_SOURCES} -Dsonar.java.binaries=Java/**/bin/*.class"
                 }
             }
         }
