@@ -4,23 +4,43 @@ pipeline {
         stage('Build Projects') {
             steps {
                 script {
-                    // Create the bin directory for CanonicalizePathNameAfter if it does not exist
-                    sh 'mkdir -p ./Java/CanonicalizePathNameAfter/bin'
-                    // Compile the Java files from src to bin directory for CanonicalizePathNameAfter
-                    sh 'javac -d ./Java/CanonicalizePathNameAfter/bin ./Java/CanonicalizePathNameAfter/src/*.java'
+                    // Compile all Java projects except arbitraryfileupload with javac
+                    sh '''
+                    for dir in ./Java/*/src; do
+                        if [[ "$dir" != *"arbitraryfileupload/src"* ]]; then
+                            base=$(dirname "$dir")
+                            mkdir -p "$base/bin"
+                            javac -d "$base/bin" "$dir"/*.java
+                        fi
+                    done
+                    '''
                 }
             }
         }
         stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('sonar-server') { // Ensure 'sonar-server' matches your SonarQube server configuration in Jenkins
-                    // Single Scan combining both projects
-                    sh '''
-                    sonar-scanner \
-                    -Dsonar.projectKey=secure-coding-practices \
-                    -Dsonar.sources=./Java/arbitraryfileupload/src,./Java/CanonicalizePathNameAfter/src \
-                    -Dsonar.java.binaries=./Java/arbitraryfileupload/target/classes,./Java/CanonicalizePathNameAfter/bin
-                    '''
+                withSonarQubeEnv('sonar-server') {
+                    script {
+                        // Dynamically find all src directories for sonar.sources
+                        def sources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
+                        // Remove the trailing comma
+                        sources = sources[0..-2]
+                        
+                        // Dynamically find all bin directories for sonar.java.binaries, including arbitraryfileupload if it's built separately by Maven
+                        def binaries = sh(script: "find ./Java -type d -name bin | tr '\\n' ','", returnStdout: true).trim()
+                        // Add the Maven project binary directory manually
+                        binaries = binaries + "./Java/arbitraryfileupload/target/classes,"
+                        // Remove the trailing comma
+                        binaries = binaries[0..-2]
+                        
+                        // Run sonar-scanner with dynamically set properties
+                        sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=secure-coding-practices \
+                        -Dsonar.sources=${sources} \
+                        -Dsonar.java.binaries=${binaries}
+                        """
+                    }
                 }
             }
         }
