@@ -13,10 +13,6 @@ pipeline {
                             javac -d "$base/bin" "$dir"/*.java
                         fi
                     done
-                    
-                    for csproj in $(find ./C# -name "*.csproj"); do
-                        dotnet build "$csproj" -o $(dirname "$csproj")/bin
-                    done
                     '
                     '''
                 }
@@ -26,32 +22,21 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar-server') {
                     script {
-                        // Dynamically find all src directories for Java and C#, and all bin directories
-                        def javaSources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
-                        def csharpSources = sh(script: "find ./C# -type d -name src | grep -v bin | tr '\\n' ','", returnStdout: true).trim()
-                        def javaBinaries = sh(script: "find ./Java -type d -name bin -o -path '*/target/classes' | tr '\\n' ','", returnStdout: true).trim()
-                        def csharpBinaries = sh(script: "find ./C# -type d -name bin | tr '\\n' ','", returnStdout: true).trim()
+                        // Dynamically find all src directories for sonar.sources 
+                        def sources = sh(script: "find ./Java -type d -name src | tr '\\n' ','", returnStdout: true).trim()
+                        sources = sources[0..-2] // Remove the trailing comma
+
+                        // Dynamically find all bin directories for sonar.java.binaries, including Maven's target/classes
+                        def binaries = sh(script: "find ./Java -type d -name bin -o -path '*/target/classes' | tr '\\n' ','", returnStdout: true).trim()
+                        binaries = binaries[0..-2] // Remove the trailing comma
                         
-                        // Remove trailing commas
-                        javaSources = javaSources[0..-2]
-                        csharpSources = csharpSources[0..-2]
-                        javaBinaries = javaBinaries[0..-2]
-                        csharpBinaries = csharpBinaries[0..-2]
-
-                        // Combine Java and C# sources and binaries
-                        def sources = javaSources + "," + csharpSources
-                        def binaries = javaBinaries + "," + csharpBinaries
-
-                        // Generate sonar-project.properties file
-                        writeFile file: 'sonar-project.properties', text: """
-                        sonar.projectKey=secure-coding-practices
-                        sonar.sources=${sources}
-                        sonar.java.binaries=${javaBinaries}
-                        sonar.cs.dotnet.binaries=${csharpBinaries}
+                        // Execute sonar-scanner with dynamically generated properties
+                        sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=secure-coding-practices \
+                        -Dsonar.sources=${sources} \
+                        -Dsonar.java.binaries=${binaries}
                         """
-
-                        // Execute sonar-scanner using the properties file
-                        sh "sonar-scanner -Dproject.settings=sonar-project.properties"
                     }
                 }
             }
